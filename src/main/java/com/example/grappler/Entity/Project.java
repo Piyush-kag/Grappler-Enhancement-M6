@@ -16,6 +16,10 @@ public class Project {
 
     @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
     private List<AssignmentHistory> assignmentHistory;
+
+    @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
+    private List<Users> users;
+
     private String name;
     private String description;
     private LocalDateTime start_date; //datetime format
@@ -28,14 +32,6 @@ public class Project {
     public void setProject_id(Long project_id) {
         this.project_id = project_id;
     }
-
-//    public Users getUsers() {
-//        return users;
-//    }
-//
-//    public void setUsers(Users users) {
-//        this.users = users;
-//    }
 
     public List<Worklogs> getWorklogs() {
         return worklogs;

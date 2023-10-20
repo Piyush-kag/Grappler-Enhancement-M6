@@ -13,8 +13,6 @@ public class Users {
     private  String name;
     private String email;
     private Role role;
-//    @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
-// private List<Project> projects;
 
     @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
     private List<Ticket_assign> ticket_assign;
@@ -22,6 +20,8 @@ public class Users {
     @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
     private List<Worklogs> worklogs;
 
+    @ManyToMany
+    private List<Project> projects;
 
     @OneToMany(mappedBy = "users",cascade =CascadeType.ALL)
     private List<Planed> planed;
