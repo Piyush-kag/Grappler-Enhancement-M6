@@ -14,8 +14,8 @@ public class Users {
     private String email;
     private Role role;
 
-    @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
-    private List<Ticket_assign> ticket_assign;
+    @ManyToMany(mappedBy = "users")
+    private List<Tickets> tickets;
 
     @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
     private List<Worklogs> worklogs;

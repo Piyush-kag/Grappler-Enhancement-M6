@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/project")
 public class ProjectController {
     @Autowired
@@ -36,7 +37,6 @@ public class ProjectController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("An error occurred while fetching projects.");
         }
     }
-
 
     //Get Project by ID
     @GetMapping("/{id}")

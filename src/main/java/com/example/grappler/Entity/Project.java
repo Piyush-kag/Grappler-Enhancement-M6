@@ -1,53 +1,37 @@
 package com.example.grappler.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @Entity
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long project_id;
 
-    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Worklogs> worklogs;
-
-    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
-    private List<AssignmentHistory> assignmentHistory;
+//    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+//    private List<Worklogs> worklogs;
 
     @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private List<Users> users;
+
+    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
+    private List<Planed> planed;
+
+
+    @ManyToMany
+    private List<Tickets> tickets;  // Define a Many-to-Many relationship
+
 
     private String name;
     private String description;
     private LocalDateTime start_date; //datetime format
     private LocalDateTime end_date; //datetime format
 
-    public Long getProject_id() {
-        return project_id;
-    }
-
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
-    }
-
-    public List<Worklogs> getWorklogs() {
-        return worklogs;
-    }
-
-    public void setWorklogs(List<Worklogs> worklogs) {
-        this.worklogs = worklogs;
-    }
-
-    public List<AssignmentHistory> getAssignmentHistory() {
-        return assignmentHistory;
-    }
-
-    public void setAssignmentHistory(List<AssignmentHistory> assignmentHistory) {
-        this.assignmentHistory = assignmentHistory;
-    }
 
     public String getName() {
         return name;
@@ -77,6 +61,14 @@ public class Project {
         return end_date;
     }
 
+    public Long getProject_id() {
+        return project_id;
+    }
+
+    public void setProject_id(Long project_id) {
+        this.project_id = project_id;
+    }
+
     public void setEnd_date(LocalDateTime end_date) {
         this.end_date = end_date;
     }
@@ -88,7 +80,4 @@ public class Project {
     public void setPlaned(List<Planed> planed) {
         this.planed = planed;
     }
-
-    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
-    private List<Planed> planed;
 }

@@ -1,14 +1,73 @@
 package com.example.grappler.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
+@Data
 @Entity
 public class Tickets {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)@Column(name ="ticket_id",nullable=false )Long ticket_id;
+
+    @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
+    private List<Worklogs> worklogs;
+
+    @OneToMany(mappedBy = "tickets",cascade =CascadeType.ALL)
+    private List<Planed> planed;
+
+    @ManyToMany
+    @JoinTable(name = "ticket_user",
+            joinColumns = @JoinColumn(name = "ticket_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Users> users;
+
+    @ManyToOne
+    private AssignmentHistory assignmentHistory;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private Project project;
+
+    private List<Long> userIds;
+
+    public LocalDateTime getStart_time() {
+        return start_time;
+    }
+
+    public void setStart_time(LocalDateTime startTime) {
+        this.start_time = startTime;
+    }
+
+    public void setEnd_time(LocalDateTime endTime) {
+        this.end_time = endTime;
+    }
+
+
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
+
+
+    public List<Users> getUsers() {
+        return users;
+    }
+
+    public void setUsers(List<Users> users) {
+        this.users = users;
+    }
+
+
+    public List<Long> getUserIds() {
+        return userIds;
+    }
+
+    public void setUserIds(List<Long> userIds) {
+        this.userIds = userIds;
+    }
 
     public Long getTicket_id() {
         return ticket_id;
@@ -18,13 +77,6 @@ public class Tickets {
         this.ticket_id = ticket_id;
     }
 
-    public AssignmentHistory getAssignmentHistory() {
-        return assignmentHistory;
-    }
-
-    public void setAssignmentHistory(AssignmentHistory assignmentHistory) {
-        this.assignmentHistory = assignmentHistory;
-    }
 
     public List<Worklogs> getWorklogs() {
         return worklogs;
@@ -33,15 +85,6 @@ public class Tickets {
     public void setWorklogs(List<Worklogs> worklogs) {
         this.worklogs = worklogs;
     }
-
-    public List<Ticket_assign> getTicket_assign() {
-        return ticket_assign;
-    }
-
-    public void setTicket_assign(List<Ticket_assign> ticket_assign) {
-        this.ticket_assign = ticket_assign;
-    }
-
     public List<Planed> getPlaned() {
         return planed;
     }
@@ -66,13 +109,6 @@ public class Tickets {
         this.desciption = desciption;
     }
 
-    public int getEstimated_time() {
-        return estimated_time;
-    }
-
-    public void setEstimated_time(int estimated_time) {
-        this.estimated_time = estimated_time;
-    }
 
     public String getPriority() {
         return priority;
@@ -82,23 +118,22 @@ public class Tickets {
         this.priority = priority;
     }
 
-    @ManyToOne
-    private AssignmentHistory assignmentHistory;
 
-    @OneToMany(mappedBy = "tickets" ,cascade=CascadeType.ALL)
-    private List<Worklogs> worklogs;
-
-    @OneToMany(mappedBy = "tickets" ,cascade=CascadeType.ALL)
-    private List<Ticket_assign>  ticket_assign ;
-
-
-    @OneToMany(mappedBy = "tickets",cascade =CascadeType.ALL)
-    private List<Planed> planed;
- String title;
- String desciption;
+    String title;
+    String desciption;
     //String status;
-    private int estimated_time;
     String priority;
+    private int estimated_time;
+    private LocalDateTime start_time;
+    private LocalDateTime end_time;
+
+    public int getEstimated_time() {
+        return estimated_time;
+    }
+
+    public void setEstimated_time(int estimated_time) {
+        this.estimated_time = estimated_time;
+    }
 
     @Override
     public String toString() {
@@ -107,7 +142,9 @@ public class Tickets {
                 ", title='" + title + '\'' +
                 ", description='" + desciption + '\'' +
                 ", priority='" + priority + '\'' +
+                ", start_Time='" + start_time+ '\'' +
                 ", estimated_Time='" + estimated_time+ '\'' +
+                ", end_Time='" + end_time+ '\'' +
                 '}';
     }
 
