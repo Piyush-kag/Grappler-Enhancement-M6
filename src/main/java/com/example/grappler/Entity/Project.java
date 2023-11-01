@@ -1,5 +1,6 @@
 package com.example.grappler.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -11,20 +12,21 @@ import java.util.List;
 public class Project {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long project_id;
+    private Long projectId;
 
-//    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-//    private List<Worklogs> worklogs;
+    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
+    private List<Worklogs> worklogs;
 
     @ManyToMany(mappedBy = "projects",cascade = CascadeType.ALL)
     private List<Users> users;
 
-    @OneToMany(mappedBy = "projects", cascade = CascadeType.ALL)
-    private List<Planed> planed;
+    @ManyToOne
+    @JsonIgnore
+    private Planed planed;
 
 
-    @ManyToMany
-    private List<Tickets> tickets;  // Define a Many-to-Many relationship
+    @OneToMany(mappedBy = "project")
+    private List<Tickets> tickets; // Define a Many-to-Many relationship
 
 
     private String name;
@@ -61,23 +63,8 @@ public class Project {
         return end_date;
     }
 
-    public Long getProject_id() {
-        return project_id;
-    }
-
-    public void setProject_id(Long project_id) {
-        this.project_id = project_id;
-    }
 
     public void setEnd_date(LocalDateTime end_date) {
         this.end_date = end_date;
-    }
-
-    public List<Planed> getPlaned() {
-        return planed;
-    }
-
-    public void setPlaned(List<Planed> planed) {
-        this.planed = planed;
     }
 }

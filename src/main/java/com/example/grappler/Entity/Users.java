@@ -1,9 +1,13 @@
 package com.example.grappler.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
+import lombok.Data;
 
 import java.util.List;
 
+
+@Data
 @Entity
 public class Users {
 
@@ -14,28 +18,30 @@ public class Users {
     private String email;
     private Role role;
 
-    @ManyToMany(mappedBy = "users")
-    private List<Tickets> tickets;
-
     @OneToMany(mappedBy = "users" ,cascade=CascadeType.ALL)
+    @JsonIgnore
     private List<Worklogs> worklogs;
 
     @ManyToMany
+    @JsonIgnore
     private List<Project> projects;
 
-    @OneToMany(mappedBy = "users",cascade =CascadeType.ALL)
-    private List<Planed> planed;
+    @ManyToOne
+    private Planed planed;
 
     public Users() {
     }
 
-    public Users(Long id, String username, String name, String email) {
+    public Users(Long id, String username, String name, String email, Role role, List<Worklogs> worklogs, List<Project> projects, Planed planed) {
         this.id = id;
         this.username = username;
         this.name = name;
         this.email = email;
+        this.role = role;
+        this.worklogs = worklogs;
+        this.projects = projects;
+        this.planed = planed;
     }
-
 
     public Long getId() {
         return id;
@@ -68,5 +74,6 @@ public class Users {
     public void setEmail(String email) {
         this.email = email;
     }
+
 }
 

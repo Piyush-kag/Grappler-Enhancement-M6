@@ -1,5 +1,6 @@
 package com.example.grappler.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,56 +11,46 @@ import java.util.List;
 @Entity
 public class Tickets {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)@Column(name ="ticket_id",nullable=false )Long ticket_id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "ticket_id", nullable = false)
+    private Long ticketId;
+
+    String title;
+    String desciption;
+    String priority;
+    private int estimated_time;
+    private LocalDateTime start_time;
+    private LocalDateTime end_time;
 
     @OneToMany(mappedBy = "ticket", cascade = CascadeType.ALL)
     private List<Worklogs> worklogs;
 
-    @OneToMany(mappedBy = "tickets",cascade =CascadeType.ALL)
-    private List<Planed> planed;
-
-    @ManyToMany
-    @JoinTable(name = "ticket_user",
-            joinColumns = @JoinColumn(name = "ticket_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Users> users;
+    @ManyToOne
+    @JsonIgnore
+    private Planed planed;
 
     @ManyToOne
+    @JsonIgnore
     private AssignmentHistory assignmentHistory;
 
     @ManyToOne
+    @JsonIgnore
     @JoinColumn(name = "project_id")
     private Project project;
 
     private List<Long> userIds;
 
-    public LocalDateTime getStart_time() {
-        return start_time;
-    }
-
-    public void setStart_time(LocalDateTime startTime) {
-        this.start_time = startTime;
-    }
-
-    public void setEnd_time(LocalDateTime endTime) {
-        this.end_time = endTime;
-    }
+    @ManyToMany
+    @JoinTable(name = "ticket_user",
+            joinColumns = @JoinColumn(name = "ticketId"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
+    private List<Users> users;
 
 
 
     public void setProject(Project project) {
         this.project = project;
     }
-
-
-    public List<Users> getUsers() {
-        return users;
-    }
-
-    public void setUsers(List<Users> users) {
-        this.users = users;
-    }
-
 
     public List<Long> getUserIds() {
         return userIds;
@@ -69,14 +60,6 @@ public class Tickets {
         this.userIds = userIds;
     }
 
-    public Long getTicket_id() {
-        return ticket_id;
-    }
-
-    public void setTicket_id(Long ticket_id) {
-        this.ticket_id = ticket_id;
-    }
-
 
     public List<Worklogs> getWorklogs() {
         return worklogs;
@@ -84,13 +67,6 @@ public class Tickets {
 
     public void setWorklogs(List<Worklogs> worklogs) {
         this.worklogs = worklogs;
-    }
-    public List<Planed> getPlaned() {
-        return planed;
-    }
-
-    public void setPlaned(List<Planed> planed) {
-        this.planed = planed;
     }
 
     public String getTitle() {
@@ -119,14 +95,6 @@ public class Tickets {
     }
 
 
-    String title;
-    String desciption;
-    //String status;
-    String priority;
-    private int estimated_time;
-    private LocalDateTime start_time;
-    private LocalDateTime end_time;
-
     public int getEstimated_time() {
         return estimated_time;
     }
@@ -138,7 +106,7 @@ public class Tickets {
     @Override
     public String toString() {
         return "Tickets{" +
-                "ticket_id=" + ticket_id +
+                "ticket_id=" + ticketId +
                 ", title='" + title + '\'' +
                 ", description='" + desciption + '\'' +
                 ", priority='" + priority + '\'' +

@@ -1,5 +1,6 @@
 package com.example.grappler.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -16,13 +17,15 @@ public class Worklogs {
     @ManyToOne
     private Users users;
 
-//    @ManyToOne
-//    private Project projects;
+    @ManyToOne
+    @JsonIgnore
+    private Project projects;
+
 
     @ManyToOne
-    @JoinColumn(name = "ticket_id") // Specify the foreign key column name
+    @JoinColumn(name = "ticket_id")
+    @JsonIgnore
     private Tickets ticket;
-
     private LocalDateTime date;
 
     private LocalDateTime start_time;//min
